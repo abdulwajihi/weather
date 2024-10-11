@@ -1,33 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Concert+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Orbitron:wght@400..900&display=swap');
-html{
+html {
     height: 100%;
 }
-h1{
+
+h1 {
     text-align: center;
 }
-body{
-    background: whitesmoke;
-    padding: 1rem 5rem;
-    font-family: 'Roboto', sans-serif;
-    text-transform: capitalize;
-    background: linear-gradient(45deg,rgba(183, 204, 248, 0.717),rgba(7, 43, 127, 0.679)), url('./background.jpg');
-    
+
+body {
+    background: linear-gradient(45deg, rgba(183, 204, 248, 0.717), rgba(7, 43, 127, 0.679)), url('./background.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    padding: 1rem 5rem;
+    font-family: 'Roboto', sans-serif;
+    text-transform: capitalize;
 }
-.header{
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.header h1{
+
+.header h1 {
     color: rgb(214, 147, 45);
     text-decoration: underline;
     font-family: 'Orbitron', sans-serif;
 }
-#input{
+
+#input {
     font-size: 18px;
     padding: 5px 10px;
     outline: none;
@@ -35,7 +38,8 @@ body{
     border-radius: 15px;
     background: aliceblue;
 }
-#search{
+
+#search {
     background: none;
     padding: 5px 20px;
     color: aliceblue;
@@ -46,38 +50,45 @@ body{
     cursor: pointer;
     border: none;
 }
-.weather{
+
+.weather {
     text-align: center;
     color: aliceblue;
 }
-#city{
+
+#city {
     font-size: 30px;
 }
-.weather img{
+
+.weather img {
     width: 120px;
     height: 120px;
     border-radius: 50%;
     background: rgba(240, 248, 255, 0.408);
 }
-#temperature{
+
+#temperature {
     font-size: 50px;
     margin: 0;
     margin-left: 30px;
     margin-bottom: 10px;
 }
-.temp-box{
+
+.temp-box {
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 30px 0;
 }
-#clouds{
+
+#clouds {
     font-size: 20px;
     background: rgba(153, 205, 50, 0.778);
     padding: 2px 20px;
     border-radius: 15px;
 }
-main{
+
+main {
     display: grid;
     grid-column-gap: 25px;
     grid-template-columns: 1fr 5px 1fr;
@@ -85,24 +96,30 @@ main{
     margin: 0 50px;
     color: white;
 }
-.next{
+
+.next {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 10px 0;
 }
-.next p,.next h3{
+
+.next p,
+.next h3 {
     margin: 3px 0;
 }
-.forecstD{
+
+.forecstD {
     margin: 20px 50px;
     color: aliceblue;
 }
-.weekF{
+
+.weekF {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
-.cast-header{
+
+.cast-header {
     color: aliceblue;
     background: rgba(254, 189, 132, 0.539);
     width: max-content;
@@ -111,19 +128,109 @@ main{
     font-size: 18px;
     margin-bottom: 5px;
 }
-.divider1,.divider2{
+
+.divider1,
+.divider2 {
     background: rgba(254, 189, 132, 0.539);
     height: 200px;
     border-radius: 5px;
 }
-.divider2{
+
+.divider2 {
     height: 5px;
     width: 30%;
     margin: 0 auto;
 }
-.time,.date{
+
+.time,
+.date {
     color: rgb(254, 189, 132);
 }
-.desc{
+
+.desc {
     color: rgb(196, 255, 77);
+}
+
+
+/* Media Queries for responsiveness */
+
+@media (max-width: 1024px) {
+    body {
+        padding: 1rem;
+    }
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+    .header h1 {
+        margin-bottom: 1rem;
+    }
+    #input {
+        width: 90%;
+    }
+    main {
+        margin: 0 20px;
+        grid-template-columns: 1fr;
+    }
+    .weather img {
+        width: 100px;
+        height: 100px;
+    }
+    #temperature {
+        font-size: 40px;
+    }
+    .weekF {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    #input,
+    #search {
+        width: 100%;
+        font-size: 16px;
+    }
+    .weather {
+        margin: 10px 0;
+    }
+    #city {
+        font-size: 24px;
+    }
+    #temperature {
+        font-size: 30px;
+    }
+    .next {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .weekF {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.2rem;
+    }
+    #input,
+    #search {
+        font-size: 14px;
+        padding: 5px;
+    }
+    .weather img {
+        width: 80px;
+        height: 80px;
+    }
+    #temperature {
+        font-size: 24px;
+    }
+    .cast-header {
+        font-size: 16px;
+    }
+    .next {
+        margin: 5px 0;
+    }
 }
