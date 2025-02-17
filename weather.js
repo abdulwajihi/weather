@@ -1,110 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEATHER APP</title>
-    <link rel="stylesheet" href="weather.css">
-</head>
-<body>
-    <div class="header">
-        <h1>WEATHER APP</h1>
-        <div>
-            <input type="text" name="" id="input" placeholder="Enter city name">
-            <button id="search" onclick="searchByCity()">Search</button></input>
-        </div>
-    </div>
+const apikey = "f5cd9f462e38ee46209ec3fa390cd5fb";
 
-    <main>        
-        <div class="weather">
-            <h2 id="city">Delhi,IN</h2>
-            <div class="temp-box">
-                <img src="weathericon.png" alt="" id="img">
-                <p id="temperature">26 °C</p>
-            </div>
-            <span id="clouds">Broken Clouds</span>
-        </div>
-        <div class="divider1"></div>
+window.addEventListener("load", () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            let lon = position.coords.longitude;
+            let lat = position.coords.latitude;
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apikey}`;
 
-        <div class="forecstH">
-            <p class="cast-header">Upcoming forecast</p>
-            <div class="templist">
+            fetch(url)
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    weatherReport(data); // Display current weather
+                })
+                .catch((error) => console.error("Error fetching weather data:", error));
+        });
+    }
+});
 
-                <div class="next">
-                    <div>
-                        <p class="time">8:30 PM</p>
-                        <p>29 °C / 29 °C</p>
-                    </div>
-                    <p class="desc">Light Rain</p>
-                </div>
+function searchByCity() {
+    let place = document.getElementById('input').value;
+    const urlsearch = `https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=${apikey}`;
 
-                <div class="next">
-                    <div>
-                        <p class="time">8:30 PM</p>
-                        <p>29 °C / 29 °C</p>
-                    </div>
-                    <p class="desc">Light Rain</p>
-                </div>
+    fetch(urlsearch)
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            weatherReport(data); // Display weather for searched city
+        })
+        .catch((error) => console.error("Error fetching city weather:", error));
 
-                <div class="next">
-                    <div>
-                        <p class="time">8:30 PM</p>
-                        <p>29 °C / 29 °C</p>
-                    </div>
-                    <p class="desc">Light Rain</p>
-                </div>
+    document.getElementById('input').value = ''; // Clear input field
+}
 
-                <div class="next">
-                    <div>
-                        <p class="time">8:30 PM</p>
-                        <p>29 °C / 29 °C</p>
-                    </div>
-                    <p class="desc">Light Rain</p>
-                </div>
+function weatherReport(data) {
+    const urlcast = `https://api.openweathermap.org/data/2.5/forecast?q=${data.name}&appid=${apikey}`;
 
-                <div class="next">
-                    <div>
-                        <p class="time">8:30 PM</p>
-                        <p>29 °C / 29 °C</p>
-                    </div>
-                    <p class="desc">Light Rain</p>
-                </div>
+    fetch(urlcast)
+        .then((res) => res.json())
+        .then((forecast) => {
+            console.log(forecast.city);
+            hourForecast(forecast); // Display hourly forecast
+            dayForecast(forecast); // Display 4-day forecast
 
-            </div>
-        </div>
-    </main>
+            document.getElementById('city').innerText = `${data.name}, ${data.sys.country}`;
+            document.getElementById('temperature').innerText = `${Math.floor(data.main.temp - 273)} °C`;
+            document.getElementById('clouds').innerText = data.weather[0].description;
 
-    <div class="forecstD">
-        <div class="divider2"></div>
-        <p class="cast-header"> Next 4 days forecast</p>
-        <div class="weekF">
+            let icon1 = data.weather[0].icon;
+            let iconurl = `https://api.openweathermap.org/img/w/${icon1}.png`;
+            document.getElementById('img').src = iconurl;
+        })
+        .catch((error) => console.error("Error fetching forecast:", error));
+}
 
-            <div class="dayF">
-                <p class="date">Sun Jul 03 2022</p>
-                <p>31 °C / 31 °C</p>
-                <p class="desc">Overcast Clouds</p>
-            </div>
+function hourForecast(forecast) {
+    document.querySelector('.templist').innerHTML = ''; // Clear previous hourly forecast
 
-            <div class="dayF">
-                <p class="date">Sun Jul 03 2022</p>
-                <p>31 °C / 31 °C</p>
-                <p class="desc">Overcast Clouds</p>
-            </div>
+    for (let i = 0; i < 5; i++) {
+        let date = new Date(forecast.list[i].dt * 1000);
 
-            <div class="dayF">
-                <p class="date">Sun Jul 03 2022</p>
-                <p>31 °C / 31 °C</p>
-                <p class="desc">Overcast Clouds</p>
-            </div>
+        let hourR = document.createElement('div');
+        hourR.setAttribute('class', 'next');
 
-            <div class="dayF">
-                <p class="date">Sun Jul 03 2022</p>
-                <p>31 °C / 31 °C</p>
-                <p class="desc">Overcast Clouds</p>
-            </div>
-        </div>
-    </div>
-    <script src="weather.js"></script>
-</body>
-</html>
+        let div = document.createElement('div');
+
+        let time = document.createElement('p');
+        time.setAttribute('class', 'time');
+        time.innerText = date.toLocaleTimeString(undefined, { timeZone: 'Asia/Kolkata' }).replace(':00', '');
+
+        let temp = document.createElement('p');
+        temp.innerText = `Max: ${Math.floor(forecast.list[i].main.temp_max - 273)} °C / Min: ${Math.floor(forecast.list[i].main.temp_min - 273)} °C`;
+
+        let desc = document.createElement('p');
+        desc.setAttribute('class', 'desc');
+        desc.innerText = forecast.list[i].weather[0].description;
+
+        div.appendChild(time);
+        div.appendChild(temp);
+        hourR.appendChild(div);
+        hourR.appendChild(desc);
+
+        document.querySelector('.templist').appendChild(hourR);
+    }
+}
+
+function dayForecast(forecast) {
+    document.querySelector('.weekF').innerHTML = ''; // Clear previous forecast
+
+    let dayData = {};
+
+    // Aggregate forecast data for each day
+    forecast.list.forEach((entry) => {
+        let date = new Date(entry.dt * 1000).toDateString(undefined, { timeZone: 'Asia/Kolkata' });
+
+        if (!dayData[date]) {
+            dayData[date] = {
+                temp_max: entry.main.temp_max,
+                temp_min: entry.main.temp_min,
+                description: entry.weather[0].description
+            };
+        } else {
+            dayData[date].temp_max = Math.max(dayData[date].temp_max, entry.main.temp_max);
+            dayData[date].temp_min = Math.min(dayData[date].temp_min, entry.main.temp_min);
+        }
+    });
+
+    // Extract and display 4 days of forecast
+    Object.keys(dayData).slice(0, 4).forEach((date) => {
+        let div = document.createElement('div');
+        div.setAttribute('class', 'dayF');
+
+        let day = document.createElement('p');
+        day.setAttribute('class', 'date');
+        day.innerText = date;
+
+        let temp = document.createElement('p');
+        temp.innerText = `Max: ${Math.floor(dayData[date].temp_max - 273)} °C / Min: ${Math.floor(dayData[date].temp_min - 273)} °C`;
+
+        let description = document.createElement('p');
+        description.setAttribute('class', 'desc');
+        description.innerText = dayData[date].description;
+
+        div.appendChild(day);
+        div.appendChild(temp);
+        div.appendChild(description);
+
+        document.querySelector('.weekF').appendChild(div);
+    });
+}
