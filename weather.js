@@ -121,4 +121,7 @@ function dayForecast(forecast) {
 
         document.querySelector('.weekF').appendChild(div);
     });
+<<<<<<< Updated upstream
 }
+=======
+>>>>>>> Stashed changes
